@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>        
+		<title>Troubleshoot Extension for BUI</title>
+		<meta charset="utf-8"> 	
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+		<link rel='stylesheet' href='css/ts-template.css'>
+		<!-- This is the main css file for the default Alta theme -->
+		<link rel="stylesheet" id="css" href="https://static.oracle.com/cdn/jet/v4.0.0/default/css/alta/oj-alta-min.css">
+       
+		<!-- RequireJS bootstrap file -->        
+        <script type="text/javascript" src="https://static.oracle.com/cdn/jet/v4.0.0/3rdparty/require/require.js"></script>
+        <script type="text/javascript" src="../ViewModel/js/requireConfig.js"></script>
+        
+		<script src="https://sc-eferreira.rightnowdemo.com/AgentWeb/module/extensibility/js/client/core/extension_loader.js?"></script>
+
+    </head>
+    
+    <body>        
+        <div id="tsContent">
+            <div>
+                <oj-button id="downloadContent" on-click='[[buttonClick]]'>
+                    <span class="fa fa-download"> Download</span>
+                </oj-button>
+            </div>
+            <br>
+            <div>                
+                <oj-text-area id="agentAddInfo" value="" style="max-width:100%" placeholder="Describe what you were doing when you observed the defective behavior." resize-behavior="both"></oj-text-area><br>
+            </div>
+            <br>
+            <oj-accordion id="accordionPage" multiple expanded='[{"id":"detail"}, {"id":"consoleLog"},{"id":"consoleDebug"},{"id":"consoleError"},{"id":"consoleWarn"}]'>                
+                <oj-collapsible id="detail" expanded="true">
+                    <span slot="header" style="background-color:#FFFFFF;font-size:18px;border:none"><span> Detail</span></span>                        
+                        <oj-form-layout max-columns="3" direction="row">
+                            <oj-input-text id="tsDate" value="{{tsDate}}" label-hint="Date" disabled="true"></oj-input-text>
+                            <oj-input-text id="tsDurantion" value="{{duration}}" label-hint="Duration" disabled="true"></oj-input-text>
+                            <oj-input-text id= "tsNavigator" value="{{tsNavigatorInfo}}" label-hint="Navigator" disabled="true"></oj-input-text>
+                            <oj-input-text id="osvcUserLogin" value="{{osvcUserLogin}}" label-hint="User Login" disabled="true"></oj-input-text>
+                            <oj-input-text id="userProfile" value="{{userProfile}}" label-hint="User Profile" disabled="true"></oj-input-text>
+                            <oj-input-text id="osvcInterfaceName" value="{{osvcInterfaceName}}" label-hint="Interface Name" disabled="true"></oj-input-text>
+                            <oj-input-text id="debugLevel" value="{{debugLevel}}" label-hint="Debug Level" disabled="true"></oj-input-text>
+                            <oj-input-text id="performance" value="{{performance}}" label-hint="Performance Log" disabled="true"></oj-input-text>
+                        </oj-form-layout>
+                </oj-collapsible>
+                
+                <oj-collapsible id="consoleLog" expanded="true">
+                    <span slot="header" style="font-size:18px;"><span> Conosle Log</span></span>
+                    <oj-table id='consoleLogTable' 
+                        aria-label='Console Log Table' 
+                        data='[[consoleLog]]' 
+                        columns-default.sortable='disabled' 
+                        columns='[{"headerText": "Seq.", "field": "id"},{"headerText": "Log Message", "field": "log"}]' 
+                        row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" 
+                        style='width: 100%;'
+                    > 
+                    </oj-table>
+                </oj-collapsible>
+
+                <oj-collapsible id="consoleDebug" expanded="true">
+                    <span slot="header" style="background-color:#F0F8FF;font-size:18px;"><span> Console Debug</span></span>
+                    <oj-table id='consoleDebugTable' 
+                        aria-label='Console Debug Table' 
+                        data='[[consoleDebug]]' 
+                        columns-default.sortable='disabled'
+                        style="table-layout:fixed; width: 100%;"
+                        columns='[{"headerText": "Seq.", "field": "id"}, {"headerText": "Log Message", "field": "log"}]' 
+                        row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]"
+                    > 
+                    </oj-table>
+                </oj-collapsible>
+
+                <oj-collapsible id="consoleWarn" expanded="true">
+                    <span slot="header" style="background-color:#FFFFF0;font-size:18px;"><span><span class="fa fa-exclamation-triangle" style="color:#FFD700"></span> Console Warn</span></span>                
+                    <oj-table id='consoleWarnTable' aria-label='Console Warn Table' data='[[consoleWarn]]'  columns='[
+                    {"headerText": "Seq.", "field": "id"},
+                    {"headerText": "Log Message", "field": "log"}]' row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" style='width: 100%;'> 
+                    </oj-table>
+                </oj-collapsible>
+
+                <oj-collapsible id="consoleError" expanded="true">
+                    <span slot="header" style="background-color:#FFF0F5;font-size:18px;"><span><span class="fa fa-times-circle" style="color:red"></span> Console Error</span></span>
+                    <oj-table id='consoleErrorTable' aria-label='Console Error Table' data='[[consoleError]]' columns-default.sortable='disabled' columns='[
+                    {"headerText": "Seq.", "field": "id"},
+                    {"headerText": "Log Message", "field": "log"}]' row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" style='width: 100%;'> 
+                    </oj-table>
+                </oj-collapsible>
+            </oj-accordion>
+
+            <template id="row_template">
+                    <tr>
+                    <td>
+                        <oj-bind-text value="[[id]]"></oj-bind-text>
+                    </td>
+                    <td style="white-space: unset">
+                        <oj-bind-text value="[[log]]"></oj-bind-text>
+                    </td>
+                    </tr>
+            </template>
+        </div>
+        <script type="text/javascript" src="../ViewModel/js/ts-createContent.js"></script>
+	</body>	
+</html>
