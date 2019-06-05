@@ -1,0 +1,2 @@
+# BUI-Troubleshoot-Extension
+The “Troubleshoot Extension Sample Code” was created to automatically capture information, such as OSvC Basic Information, and Web Console Log, Error, Warn, and Debug messages in one fell swoop instead of requiring agents to install or use different tools outside of Oracle Service Cloud. All that agents need to do is push the "start" button (located in the status bar) and push the “stop” when the agents have completed all steps to reproduce the error.
