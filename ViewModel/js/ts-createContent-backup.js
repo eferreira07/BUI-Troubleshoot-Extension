@@ -18,7 +18,6 @@ require(['knockout',
   'use strict';
     
     function DetailModel(logDataCollected){ 
-      
       console.log(logDataCollected);
       const index = Object.keys(logDataCollected.result).length - 1;
 
@@ -39,7 +38,7 @@ require(['knockout',
           const self = this;      
       
           self.dataConsoleLog = ko.observableArray();                    
-          self.dataConsoleLog(logDataCollected.result[index].tsConsoleLog);
+          self.dataConsoleLog(logDataCollected.result[index].tsConsoleInfo);
       
           self.consoleLog = new ArrayDataProvider(
             self.dataConsoleLog, {
@@ -55,6 +54,7 @@ require(['knockout',
               keyAttributes: 'name'
             }
           );
+
 
           self.dataConsoleWarn = ko.observableArray();                    
           self.dataConsoleWarn(logDataCollected.result[index].tsConsoleWarn);
@@ -74,31 +74,20 @@ require(['knockout',
             }
           ); 
 
-          function download(filename, textToSave) {
-
-            var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
-            var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+          function download(filename, text) {
             var element = document.createElement('a');
-            element.setAttribute('href', textToSaveAsURL);
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
             element.setAttribute('download', filename);
+
             element.style.display = 'none';
             document.body.appendChild(element);
+
             element.click();
-        
 
-            //var element = document.createElement('a');
-            //element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-            //element.setAttribute('download', filename);
-
-            //element.style.display = 'none';
-            //document.body.appendChild(element);
-
-            //element.click();
-
-            //document.body.removeChild(element);
+            document.body.removeChild(element);
           }
 
-          self.buttonClick = function(){            
+          self.buttonClick = function(){
             var agentAdditionalInfo = '********************************'
             + '\nAgent Additional Information'
             + '\n********************************\n'
@@ -121,9 +110,9 @@ require(['knockout',
             + '\nConsole Log'
             + '\n********************************\n';
             
-            if (logDataCollected.result[index].tsConsoleLog.length > 0) {
-              logDataCollected.result[index].tsConsoleLog.forEach(function(value){
-                  consoleLog = consoleLog + value.LogMsg + '\n';
+            if (tsFinalResul.osvcLog.length > 0) {
+              tsFinalResul.osvcLog.forEach(function(value){
+                  consoleLog = consoleLog + value.log + '\n';
               });
             }else { consoleLog = consoleLog + 'No data was captured.' + '\n'; }
  
@@ -131,9 +120,9 @@ require(['knockout',
             + '\nConsole Debug'
             + '\n********************************\n';
                             
-            if (logDataCollected.result[index].tsConsoleDebug.length > 0) {
-              logDataCollected.result[index].tsConsoleDebug.forEach(function(value){
-                consoleDebug = consoleDebug + value.LogMsg + '\n';
+            if (tsFinalResul.osvcDebug.length > 0) {
+              tsFinalResul.osvcDebug.forEach(function(value){
+                consoleDebug = consoleDebug + value.log + '\n';
               });
             }else { consoleDebug = consoleDebug + 'No data was captured.' + '\n'; }
  
@@ -141,9 +130,9 @@ require(['knockout',
             + '\nConsole Warn'
             + '\n********************************\n';
              
-            if (logDataCollected.result[index].tsConsoleWarn.length > 0) {
-              logDataCollected.result[index].tsConsoleWarn.forEach(function(value){
-                consoleWarn = consoleWarn + value.LogMsg + '\n';
+            if (tsFinalResul.osvcWarn.length > 0) {
+              tsFinalResul.osvcWarn.forEach(function(value){
+                consoleWarn = consoleWarn + value.log + '\n';
               });
             }else { consoleWarn = consoleWarn + 'No data was captured.' + '\n'; }
 
@@ -151,13 +140,13 @@ require(['knockout',
             + '\nConsole Error'
             + '\n********************************\n';
             
-            if (logDataCollected.result[index].tsConsoleError.length > 0) {
-              logDataCollected.result[index].tsConsoleError.forEach(function(value){
-                consoleError = consoleError + value.LogMsg + '\n';
+            if (tsFinalResul.osvcError.length > 0) {
+              tsFinalResul.osvcError.forEach(function(value){
+                consoleError = consoleError + value.log + '\n';
               });
             }else { consoleError = consoleError + 'No data was captured.' + '\n'; }
           
-            var filename = "TroubleshootData_" + document.getElementById("tsDate").value + ".txt";            
+            var filename = "TroubleshootData_" + tsFinalResul.osvcInfo.tsDate + ".txt";            
             var text = agentAdditionalInfo + basic + consoleLog + consoleDebug + consoleWarn + consoleError;
 
             download(filename, text);

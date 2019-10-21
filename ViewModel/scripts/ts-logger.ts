@@ -14,6 +14,7 @@ export class TsLogger {
     tsConsoleError: [];
     tsConsoleLog: [];
     tsConsoleDebug: [];
+    tsConsoleInfo: [];
     tsDate = new Date().toLocaleString();
     tsNavigatorInfo: string;
     tsDebugLevel: number;
@@ -27,7 +28,8 @@ export class TsLogger {
         this.tsConsoleWarn = [];
         this.tsConsoleError = [];
         this.tsConsoleLog = [];
-        this.tsConsoleDebug = [];
+        this.tsConsoleDebug = []; 
+        this.tsConsoleInfo = [];        
         this.tsNavigatorInfo = "";
         this.osvcUserFirstName = "";
         this.osvcUserLastName = "";

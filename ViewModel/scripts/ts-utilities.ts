@@ -8,7 +8,7 @@ export var getOSvCInterface = function(tsLogger: TsLogger){
     return new ORACLE_SERVICE_CLOUD.ExtensionPromise((resolve, reject) => {
         ORACLE_SERVICE_CLOUD.extension_loader.load("Global Extension", "1").then(function(extensionProvider){
             extensionProvider.getGlobalContext().then(function(globalContext) {                
-                tsLogger.osvcUserId = globalContext.getAccountId();;
+                tsLogger.osvcUserId = globalContext.getAccountId();
                 tsLogger.osvcInterfaceName = globalContext.getInterfaceName();
                 tsLogger.osvcProfile = globalContext.getProfileName();
                 resolve('success');

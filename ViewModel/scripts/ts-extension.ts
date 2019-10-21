@@ -21,39 +21,61 @@ class TsExtension {
         let stopBtn = document.createElement('button');
         let timer = document.createElement('time'); 
         const tsTicker = new TsTicker();
-        const tsLogger = new TsLogger();
+        
 
         const osvcTsConfig = "select value from configurations where lookupName = 'CUSTOM_CFG_TS'";
         
-        TsUtilities.myROQLQuery(osvcTsConfig).then(function(result){
-            result["items"].forEach(function(rows){
-                rows["rows"].forEach(function(value){ 
-                    var obj = JSON.parse(value);
-                    tsLogger.tsDebugLevel = obj.debugLevel;
-                    tsLogger.tsPerformance = obj.performance;                    
-                })
-            });                     
-        });       
+   
                 
         // When the start button is clicked it is turned disbaled and gray. At this time the stop button turned to red and anabled.
         startBtn.textContent = " Start";
         startBtn.style.color = "green";
         startBtn.className = "btn fa fa-play-circle";
         startBtn.onclick = function() {
-            self.isRunning = true;
+
+            const tsLogger = new TsLogger();
+
+            TsUtilities.myROQLQuery(osvcTsConfig).then(function(result){
+                result["items"].forEach(function(rows){
+                    rows["rows"].forEach(function(value){ 
+                        var obj = JSON.parse(value);
+
+                        tsLogger.tsDebugLevel = obj.debugLevel;
+                        tsLogger.tsPerformance = obj.performance;
+
+                        self.isRunning = true;
             
-            startBtn.style.color = "gray";
-            startBtn.style.opacity = "0.3";
-            startBtn.style.cursor = "not-allowed";
-            startBtn.disabled = true;
-
-            stopBtn.style.color = "red";
-            stopBtn.style.opacity = "1";
-            stopBtn.style.cursor = "pointer";
-            stopBtn.disabled = false;            
-
-            // call start process to capture log;            
-            self.startCapture(self.isRunning, tsTicker, tsLogger); 
+                        startBtn.style.color = "gray";
+                        startBtn.style.opacity = "0.3";
+                        startBtn.style.cursor = "not-allowed";
+                        startBtn.disabled = true;
+            
+                        stopBtn.style.color = "red";
+                        stopBtn.style.opacity = "1";
+                        stopBtn.style.cursor = "pointer";
+                        stopBtn.disabled = false;            
+            
+                        // call start process to capture log;            
+                        self.startCapture(self.isRunning, tsTicker, tsLogger); 
+            
+                        stopBtn.onclick = function() {
+                        
+                            stopBtn.style.color = "gray";
+                            stopBtn.style.opacity = "0.3";
+                            stopBtn.style.cursor = "not-allowed";
+                            stopBtn.disabled = true;
+                            
+                            startBtn.style.color = "green";
+                            startBtn.style.opacity = "1";
+                            startBtn.style.cursor = "pointer";
+                            startBtn.disabled = false;
+                                    
+                            // call stop process to show log capture results.
+                            self.stopCapture(self.isRunning, tsTicker ,tsLogger);
+                        }
+                    })
+                });                     
+            });    
         
         }
         
@@ -63,21 +85,7 @@ class TsExtension {
         stopBtn.style.opacity = "0.3"
         stopBtn.style.cursor = "not-allowed";
         stopBtn.className = "btn fa fa-stop-circle";
-        stopBtn.onclick = function() {
-            
-            stopBtn.style.color = "gray";
-            stopBtn.style.opacity = "0.3";
-            stopBtn.style.cursor = "not-allowed";
-            stopBtn.disabled = true;
-            
-            startBtn.style.color = "green";
-            startBtn.style.opacity = "1";
-            startBtn.style.cursor = "pointer";
-            startBtn.disabled = false;
-                    
-            // call stop process to show log capture results.
-            self.stopCapture(self.isRunning, tsTicker ,tsLogger);            
-        }
+
 
         timer.textContent = "00:00:00";
         timer.className = "time";
@@ -92,8 +100,8 @@ class TsExtension {
                         
     }
 
-    startCapture(isRunning: boolean, tsTicker: TsTicker, tsLogger: TsLogger){
-        
+    startCapture(isRunning: boolean, tsTicker: TsTicker, tsLogger: TsLogger){                
+
         if(isRunning == true){
 
             //Start stop-watcher.
@@ -111,8 +119,8 @@ class TsExtension {
                 });                     
             });
 
-            if(tsLogger.tsPerformance) {window.parent.ORACLE_SERVICE_CLOUD.Configuration.isPerformanceMonitoringEnabled=true;}
-            if(tsLogger.tsDebugLevel > 0) {window.parent.ORACLE_SERVICE_CLOUD.Configuration.logLevel = 5;}
+            if(tsLogger.tsPerformance) {window.parent.ORACLE_SERVICE_CLOUD.Configuration.isPerformanceMonitoringEnabled = true;}
+            if(tsLogger.tsDebugLevel > 0) {window.parent.ORACLE_SERVICE_CLOUD.Configuration.logLevel = tsLogger.tsDebugLevel;}
                         
             navigator.sayswho= (function(){
                 var ua= navigator.userAgent, tem, 
@@ -139,14 +147,14 @@ class TsExtension {
                 // default &  console.log()
                 console.defaultLog(console, arguments);
                 // new & array data
-                //console.logs.push(Array.from(arguments));
-                var message = "";
-                Array.from(arguments).forEach(function(value){
-                    message = message + '\n'+ value;
-                    
-                })
-
-                tsLogger.tsConsoleLog.push({'id': tsLogger.tsConsoleLog.length + 1 , 'log': message});
+            
+                var logMsg = '';
+                for (var i=0; i < arguments.length; i++) {
+                  if (arguments[i].length > logMsg.length) {
+                    logMsg = arguments[i];                    
+                  }
+                }
+                tsLogger.tsConsoleLog.push({"Id": tsLogger.tsConsoleLog.length + 1,"LogMsg": logMsg});
               }
 
             //error
@@ -156,14 +164,14 @@ class TsExtension {
                 // default &  console.error()
                 console.defaultError.apply(console, arguments);
                 // new & array data
-                //console.errors.push(Array.from(arguments));
-                var message = "";
-                Array.from(arguments).forEach(function(value){
-                    message = message + '\n'+ value;
-                    
-                })
-
-                tsLogger.tsConsoleError.push({'id': tsLogger.tsConsoleError.length + 1 , 'log': message});
+                
+                var logMsg = '';
+                for (var i=0; i < arguments.length; i++) {
+                  if (arguments[i].length > logMsg.length) {
+                    logMsg = arguments[i];                    
+                  }
+                }
+                tsLogger.tsConsoleError.push({"Id": tsLogger.tsConsoleError.length + 1,"LogMsg": logMsg});
             }
 
             //warn
@@ -173,14 +181,15 @@ class TsExtension {
                 // default &  console.warn()
                 console.defaultWarn.apply(console, arguments);
                 // new & array data
-                //console.warns.push(Array.from(arguments));
-                var message = "";
-                Array.from(arguments).forEach(function(value){
-                    message = message + '\n'+ value;
-                    
-                })
 
-                tsLogger.tsConsoleWarn.push({'id': tsLogger.tsConsoleWarn.length + 1 , 'log': message});
+                var logMsg = '';
+                for (var i=0; i < arguments.length; i++) {
+                  if (arguments[i].length > logMsg.length) {
+                    logMsg = arguments[i];                    
+                  }
+                }
+                tsLogger.tsConsoleWarn.push({'Id': tsLogger.tsConsoleWarn.length + 1 ,"LogMsg": logMsg});
+
             }
             
             //debug
@@ -190,14 +199,31 @@ class TsExtension {
                 // default &  console.debug()
                 console.defaultDebug.apply(console, arguments);
                 // new & array data
-                //console.debugs.push(Array.from(arguments));
-                var message = "";
-                Array.from(arguments).forEach(function(value){
-                    message = message + '\n'+ value;
-                    
-                })
 
-                tsLogger.tsConsoleDebug.push({'id': tsLogger.tsConsoleDebug.length + 1 , 'log': message});
+                var logMsg = '';
+                for (var i=0; i < arguments.length; i++) {
+                  if (arguments[i].length > logMsg.length) {
+                    logMsg = arguments[i];                    
+                  }
+                }
+                tsLogger.tsConsoleDebug.push({'Id': tsLogger.tsConsoleDebug.length + 1,"LogMsg": logMsg});            
+            }
+
+                        
+            //info
+            console.defaultInfo = console.info.bind(window.parent.console);
+            window.parent.console.info = function(){
+                // default &  console.debug()
+                console.defaultInfo.apply(console, arguments);                
+                                                
+                var logMsg: string = '';
+                for (var i=0; i < arguments.length; i++) {
+                  if (arguments[i].length > logMsg.length) {
+                    logMsg = arguments[i];                    
+                  }
+                }
+                
+                tsLogger.tsConsoleLog.push({"Id": tsLogger.tsConsoleLog.length + 1,"LogMsg": logMsg});                                                
             } 
 
         }    
@@ -219,13 +245,8 @@ class TsExtension {
             const tsResults = new TsResults(tsLogger);            
             tsResults.saveLocalBlob();
 
-            //Show Modal with capture results.
-            TsUtilities.MyModalWindow();
-
-            tsLogger.tsConsoleDebug = [];
-            tsLogger.tsConsoleWarn = [];
-            tsLogger.tsConsoleError = [];
-            tsLogger.tsConsoleLog = [];
+            //Open Window Modal to present the data collection results.
+            TsUtilities.MyModalWindow();        
         }
     }
 

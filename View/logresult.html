@@ -6,13 +6,13 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 		<link rel='stylesheet' href='css/ts-template.css'>
 		<!-- This is the main css file for the default Alta theme -->
-		<link rel="stylesheet" id="css" href="https://static.oracle.com/cdn/jet/v4.0.0/default/css/alta/oj-alta-min.css">
+		<link rel="stylesheet" id="css" href="https://static.oracle.com/cdn/jet/v7.1.0/default/css/alta/oj-alta-min.css">
        
 		<!-- RequireJS bootstrap file -->        
-        <script type="text/javascript" src="https://static.oracle.com/cdn/jet/v4.0.0/3rdparty/require/require.js"></script>
+        <script type="text/javascript" src="https://static.oracle.com/cdn/jet/v7.1.0/3rdparty/require/require.js"></script>
         <script type="text/javascript" src="../ViewModel/js/requireConfig.js"></script>
         
-		<script src="https://sc-eferreira.rightnowdemo.com/AgentWeb/module/extensibility/js/client/core/extension_loader.js?"></script>
+		<script src="/AgentWeb/module/extensibility/js/client/core/extension_loader.js?"></script>
 
     </head>
     
@@ -49,7 +49,7 @@
                         aria-label='Console Log Table' 
                         data='[[consoleLog]]' 
                         columns-default.sortable='disabled' 
-                        columns='[{"headerText": "Seq.", "field": "id"},{"headerText": "Log Message", "field": "log"}]' 
+                        columns='[{"headerText": "Seq.", "field": "Id"},{"headerText": "Log Message", "field": "LogMsg"}]' 
                         row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" 
                         style='width: 100%;'
                     > 
@@ -63,7 +63,7 @@
                         data='[[consoleDebug]]' 
                         columns-default.sortable='disabled'
                         style="table-layout:fixed; width: 100%;"
-                        columns='[{"headerText": "Seq.", "field": "id"}, {"headerText": "Log Message", "field": "log"}]' 
+                        columns='[{"headerText": "Seq.", "field": "Id"}, {"headerText": "Log Message", "field": "LogMsg"}]' 
                         row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]"
                     > 
                     </oj-table>
@@ -72,16 +72,16 @@
                 <oj-collapsible id="consoleWarn" expanded="true">
                     <span slot="header" style="background-color:#FFFFF0;font-size:18px;"><span><span class="fa fa-exclamation-triangle" style="color:#FFD700"></span> Console Warn</span></span>                
                     <oj-table id='consoleWarnTable' aria-label='Console Warn Table' data='[[consoleWarn]]'  columns='[
-                    {"headerText": "Seq.", "field": "id"},
-                    {"headerText": "Log Message", "field": "log"}]' row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" style='width: 100%;'> 
+                    {"headerText": "Seq.", "field": "Id"},
+                    {"headerText": "Log Message", "field": "LogMsg"}]' row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" style='width: 100%;'> 
                     </oj-table>
                 </oj-collapsible>
 
                 <oj-collapsible id="consoleError" expanded="true">
                     <span slot="header" style="background-color:#FFF0F5;font-size:18px;"><span><span class="fa fa-times-circle" style="color:red"></span> Console Error</span></span>
                     <oj-table id='consoleErrorTable' aria-label='Console Error Table' data='[[consoleError]]' columns-default.sortable='disabled' columns='[
-                    {"headerText": "Seq.", "field": "id"},
-                    {"headerText": "Log Message", "field": "log"}]' row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" style='width: 100%;'> 
+                    {"headerText": "Seq.", "field": "Id"},
+                    {"headerText": "Log Message", "field": "LogMsg"}]' row-renderer="[[oj.KnockoutTemplateUtils.getRenderer('row_template', true)]]" style='width: 100%;'> 
                     </oj-table>
                 </oj-collapsible>
             </oj-accordion>
@@ -89,14 +89,13 @@
             <template id="row_template">
                     <tr>
                     <td>
-                        <oj-bind-text value="[[id]]"></oj-bind-text>
+                        <oj-bind-text value="[[Id]]"></oj-bind-text>
                     </td>
                     <td style="white-space: unset">
-                        <oj-bind-text value="[[log]]"></oj-bind-text>
+                        <oj-bind-text value="[[LogMsg]]"></oj-bind-text>
                     </td>
                     </tr>
             </template>
-        </div>
         <script type="text/javascript" src="../ViewModel/js/ts-createContent.js"></script>
 	</body>	
 </html>

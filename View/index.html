@@ -6,30 +6,26 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 		<link rel='stylesheet' href='css/ts-template.css'>
 		<!-- This is the main css file for the default Alta theme -->
-		<link id="css" rel="stylesheet" href="https://static.oracle.com/cdn/jet/v4.0.0/default/css/alta/oj-alta-min.css" type="text/css"/>
+		<link id="css" rel="stylesheet" href="https://static.oracle.com/cdn/jet/v7.1.0/default/css/alta/oj-alta-min.css" type="text/css"/>
 		
 		<!-- RequireJS bootstrap file -->	
 		<script type="text/javascript" src="https://static.oracle.com/cdn/jet/v4.0.0/3rdparty/require/require.js"></script>
+		<script type="text/javascript" src="../ViewModel/js/requireConfig.js"></script>
 				
 		<!--required for the screenshoots-->
-		<script src="https://sc-eferreira.rightnowdemo.com/AgentWeb/module/extensibility/js/client/core/extension_loader.js?"></script>
-
+		<script src="/AgentWeb/module/extensibility/js/client/core/extension_loader.js?"></script>
     </head>
     <body>
 		<div class="oj-flex-bar">
 			<span id="startBtn"></span>	
 			<span id="stopBtn"></span>
-			<span style="padding: 3px">|</span>
-			<!--<span class="oj-toolbar-separator"></span>-->
+			<span style="padding: 3px">|</span>			
 			<span id="timer"></span>
-		</div>
+		</div>		
 		
 		<script type="text/javascript" src="../ViewModel/js/requireConfig.js"></script>
 		<script>
 			require(['../ViewModel/js/ts-extension.js']);
-		</script>
-
-		
-		
+		</script>		
 	</body>	
 </html>
